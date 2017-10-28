@@ -243,10 +243,6 @@ function returnY(d){
 	return y;
 }
 
-
-
-
-
 function clicked(d) {
 	var x, y, k;
 
@@ -257,12 +253,48 @@ function clicked(d) {
 		y = centroid[1];
 		k = 4;
 		centered = d;
+		console.log("first");
 	} else {
 		x = width / 2;
 		y = height / 2;
 		k = 1;
 		centered = null;
+		console.log("second");
 	}
+
+
+	console.log(x + ", " + y);
+
+	// Highlight the clicked province
+	mapLayer.selectAll('path')
+		.style('fill', function(d){return centered && d===centered ? '#D5708B' : fillFn(d);});
+
+	if(centered && d===centered){
+		mapLayer.selectAll('path').transition().duration(750).style("opacity", .2);
+		d3.select("svg").selectAll("text").style('opacity', function(d){ return 0;});
+	}else{
+		mapLayer.selectAll('path').transition().duration(750).style("opacity", .8);
+		d3.select("svg").selectAll("text").transition().duration(750).style('opacity', function(d){ return 1;});
+	}
+
+
+	// Zoom
+	g.transition()
+		.duration(750)
+		.attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')scale(' + k + ')translate(' + -x + ',' + -y + ')');
+
+}
+
+function clicked1(d) {
+	var x, y, k;
+
+	// Compute centroid of the selected path
+	x = width / 2;
+	y = height / 2;
+	k = 1;
+	centered = null;
+	console.log("second");
+
 
 	console.log(x + ", " + y);
 
@@ -309,7 +341,9 @@ function clicked(d) {
 					bigText.text('');
 				}
 
+
 //O java script
+
 var opened = false;
 $('.open').click(function(){
 	$('#lightbox').fadeTo(1000, 1);
@@ -320,8 +354,9 @@ $('.open').click(function(){
 $('.close').click(function(){
 	$('#lightbox').hide();
 	$("#wrapper").css({'text-shadow': '0px 0px 0px #000'});
-	clicked(d3.select('svg'));
+	clicked1(d3.select('svg'));
 });
+
 
 		</script>
 
