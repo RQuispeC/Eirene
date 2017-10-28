@@ -127,7 +127,7 @@ var path = d3.geo.path()
 			.attr("x", returnX)
 			.attr("y", returnY)
 			.attr("text-anchor", "middle")
-			.text("hola");
+			.text(function(d){return d.properties.ESTADO;});
 	});
 
 // Get province name
