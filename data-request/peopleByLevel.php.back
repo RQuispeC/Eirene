@@ -1,0 +1,64 @@
+<?php
+header('Content-Type: text/html; charset = utf-8');
+$servername = "143.106.73.88";
+$username = "htc";
+$password = "htc_123456";
+$dbname = "hackthecampus";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+print "asdfads";
+
+$sql = "SELECT tipo,COUNT(*) AS cantidade FROM(
+    SELECT nome_curso,estado, 'graduacao' AS tipo FROM htc_alunos_graduacao_naturalidade WHERE pais='BR'
+    UNION ALL
+    SELECT nome_curso,estado, tipo
+    FROM 
+      (SELECT nome_curso, cidade, tipo
+          FROM
+          (  
+          SELECT nome_curso, cidade, 'mestrado' AS tipo
+          FROM htc_alunos_mestrado_naturalidade WHERE pais='BR'
+          UNION ALL
+          SELECT nome_curso, cidade, 'doutorado' AS tipo
+          FROM htc_alunos_doutorado_naturalidade WHERE pais='BR' 
+          ) t 
+      ) t1
+    LEFT JOIN
+      (SELECT cidade, estado FROM htc_alunos_graduacao_naturalidade WHERE pais='BR' GROUP BY cidade, estado ) t2
+    ON (t1.cidade = t2.cidade) ) t3 WHERE estado='São Paulo' GROUP BY tipo ;";
+print $sql;
+$conn->set_charset("utf8");
+$result = $conn->query($sql);
+print "asdf";
+$myArray = array();
+print $result -> num_rows;
+if ($result->num_rows > 0) {
+        $tot = 0;
+        while ($row = mysqli_fetch_assoc($result) ) {
+                echo '<pre>'; echo $tot; echo '</pre>';
+                echo '<pre>'; echo $row['cantidade']; echo '</pre>';
+                $tot = $tot + $row['cantidade'];
+        }
+        $result = $conn->query($sql);
+        while ($row = mysqli_fetch_assoc($result) ) {
+                echo '<pre>';  echo $row['cantidade']; echo '</pre>';
+                $row['cantidade'] = ($row['cantidade'] / $tot) * 100;
+                echo '<pre>'; echo $row['cantidade']; echo '</pre>';
+                $myArray[] = $row;
+        }
+        echo json_encode($myArray);
+        $fp = fopen('json/peopleByLevel.json', 'w');
+        fwrite($fp, json_encode($myArray));
+        fclose($fp);
+}
+else print "no items";
+$conn->close();
+
+?>
+
+
