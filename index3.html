@@ -57,7 +57,7 @@ menu, nav, section { display: block; }
 
 
 	  .text text{
-		  font-size: 11px;
+		  font-size: 9px;
 		  pointer-events: none;
 	  }
 
@@ -90,12 +90,12 @@ menu, nav, section { display: block; }
 			<table  >
 			<tr>
 				<td><div class="container" align="left"  style="height: 100px; width: 250px;">
-  				Selecione o filtro de pesquisa para esse estado:
+  				<div>Choose a filter:</div>
   				<div class="btn-group-vertical">
-    			<button id = "area" type="button" class="btn btn-primary" value = "área de conhecimento" onclick="select(this.id,this.value)">Área de conhecimento</button>
-    			<button id = "sexo" type="button" class="btn btn-primary" value = "sexo" onclick="select(this.id,this.value)">Sexo</button>
-    			<button id = "curso" type="button" class="btn btn-primary" value = "instituição" onclick="select(this.id,this.value)">Instituição</button>
-    			<button id = "nivel" type="button" class="btn btn-primary" value = "nível" onclick="select(this.id,this.value)">Nível</button></td>
+    			<button id = "area" type="button" class="btn btn-primary" value = "field of study" onclick="select(this.id,this.value)">Field of study</button>
+    			<button id = "sexo" type="button" class="btn btn-primary" value = "sex" onclick="select(this.id,this.value)">Sex</button>
+    			<button id = "curso" type="button" class="btn btn-primary" value = "institution" onclick="select(this.id,this.value)">Intitution</button>
+    			<button id = "nivel" type="button" class="btn btn-primary" value = "level of study" onclick="select(this.id,this.value)">Level of Study</button></td>
 			<td><div id="chartContainer"  style="height: 300px; width: 70%;"></div></td>
 
     		</tr>
@@ -115,10 +115,13 @@ function select(id,value){
 	$.each(data, function(key, value){
 		dataPoints.push({label: value[0], y: parseFloat(value[1])});
 	});
+	var t = Math.random();
+		var tempo = parseInt(t*1000)+1;
 	var chart = new CanvasJS.Chart("chartContainer",{
 		animationEnabled: true,
+		animationDuration:tempo,
 		title: {
-			text: "Corpo estudantil em "+estadoAtual+" quanto a " +value
+			text: "Students from "+estadoAtual+" in relation to " +value
 		},
 		data: [{
 			type: "pie",
@@ -132,7 +135,7 @@ function select(id,value){
 	});
 }
 var width = screen.width,
-	height = screen.height,
+	height = screen.height+200,
 	centered;
 
 
@@ -147,9 +150,9 @@ var width = screen.width,
 	//var jsonData = JSON.parse('brazil.json');
 
 	var projection = d3.geo.mercator()
-.scale(1000)
+.scale(200)
 	// Center the Map in Brasilia
-.center([-50.35072, -16.052575])
+.center([2.3392195,-29.1239402])
 	.translate([width / 2, height / 2]);
 
 var path = d3.geo.path()
@@ -187,7 +190,7 @@ var path = d3.geo.path()
 	.attr('y', 45);
 
 	// Load map data
-	d3.json('brazil.json', function(error, mapData) {
+	d3.json('world.json', function(error, mapData) {
 		var features = mapData.features;
 		
 		// Update color scale domain based on data
@@ -213,12 +216,12 @@ var path = d3.geo.path()
 			.attr("x", returnX)
 			.attr("y", returnY)
 			.attr("text-anchor", "middle")
-			.text(function(d){return d.properties.ESTADO;});
+			.text(function(d){return d.id;});
 	});
 
 // Get province name
 function nameFn(d){
-	return d && d.properties ? d.properties.ESTADO : null;
+	return d && d.properties ? d.properties.name : null;
 }
 
 // Get province name length
@@ -300,7 +303,7 @@ function clicked(d) {
 	}
 	
 	//Altera para texto do gráfico
-	estadoAtual = d.properties.ESTADO;
+	estadoAtual = d.properties.name;
 
 	// Zoom
 	g.transition()
@@ -373,10 +376,13 @@ function mouseout(d){
 		$.each(data, function(key, value){
 			dataPoints.push({label: value[0], y: parseFloat(value[1])});
 		});
+		var t = Math.random();
+		var tempo = parseInt(t*1000)+1;
 		var chart = new CanvasJS.Chart("chartContainer",{
 			animationEnabled: true,
+			animationDuration:tempo,
 			title: {
-				text: "Corpo estudantil em "+estadoAtual+" quanto a área de conhecimento "
+				text: "Students from "+estadoAtual+" in relation to field "
 			},
 			data: [{
 				type: "pie",
