@@ -1,0 +1,20 @@
+/* comment
+====== Simple Selector =======
+* ==> universal selector
+<name> ==> type selector
+#<id> ==> ID selector
+.<name class> ==> class selector
+
+====== Pseudo Class =======  {link or element that change after of an operation}
+<name>:link ==> before of call
+<name>:visited ==> after of call
+<name>:<property> ==> other functions
+
+====== Pseudo Elements ======= 
+<name>::before {insert text before of the content of <name>}
+<name>::after {insert text after of the content of <name>}
+<name>::first_letter
+*/
+p{
+	color:green;
+}
