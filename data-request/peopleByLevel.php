@@ -33,10 +33,10 @@ function formatString($str){
 }
 
 
-$servername = "143.106.73.88";
-$username = "htc";
-$password = "htc_123456";
-$dbname = "hackthecampus";
+$servername = "";
+$username = "";
+$password = "";
+$dbname = "";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
